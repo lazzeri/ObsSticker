@@ -1,0 +1,149 @@
+<html>
+<head>
+    <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <style>
+        .SmallSticker {
+            display: inline-block;
+            margin: 0 0.5rem;
+
+            animation: fadeOutUpBig; /* referring directly to the animation's @keyframe declaration */
+            animation-duration: 2.2s; /* don't forget to set a duration! */
+        }
+
+        .BigSticker {
+            display: inline-block;
+            margin: 0 0.5rem;
+
+            animation: fadeOutUpSmall; /* referring directly to the animation's @keyframe declaration */
+            animation-duration: 2.2s; /* don't forget to set a duration! */
+        }
+        .ProfilePics {
+            display: inline-block;
+            margin: 0 0.5rem;
+            border-radius: 50%;
+            animation: fadeOutUpSmall; /* referring directly to the animation's @keyframe declaration */
+            animation-duration: 2.2s; /* don't forget to set a duration! */
+        }
+
+        .Emoji {
+            display: inline-block;
+            margin: 0 0.5rem;
+
+            animation: fadeOutEmoji;
+            animation-duration: 2.2s; /* don't forget to set a duration! */
+        }
+
+        @-webkit-keyframes fadeOutUpSmall {
+            0% {
+                opacity: 1;
+                -webkit-transform: translateY(0px) scale(0.8);
+            }
+            70% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+                -webkit-transform: translateY(-100px) scale(1);
+            }
+        }
+
+        @-webkit-keyframes fadeOutUpBig {
+            0% {
+                opacity: 1;
+                -webkit-transform: translateY(0px) scale(0.5);
+            }
+            70% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+                -webkit-transform: translateY(-100px) scale(1);
+            }
+        }
+
+        @-webkit-keyframes fadeOutEmoji {
+            0% {
+                opacity: 1;
+                -webkit-transform: translateY(0px) scale(1);
+            }
+            70% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+                -webkit-transform: translateY(-100px) scale(2.2);
+            }
+        }
+
+        #Container {
+            width: 1600px;
+            height: 900px;
+            position: absolute;
+            /*   THIS IS THE COLOR TO DELETE   */
+            /*background-color: green;*/
+        }
+
+        #InputContainer {
+            width: 1400px;
+            height: 600px;
+            margin-left: 100px;
+            margin-top: 150px;
+            /*   THIS IS THE COLOR TO DELETE   */
+            /*background-color: indianred;*/
+        }
+
+        button {
+            margin-top: 920px;
+            position: relative;
+        }
+        .test{
+            margin-top:20px;
+        }
+    </style>
+</head>
+<body onload="RunCode();">
+<div id="Container">
+    <div id="InputContainer"></div>
+</div>
+<div>
+    <button onclick="TestStickers();">Test stickers</button>
+    <button onclick="TestProfilePics();">Test profile Pics!</button>
+        <label for="giftSelection">Choose a Gift:</label>
+        <select id="giftSelection" name="cars" size="1">
+            <option value="Heart">Heart</option>
+            <option value="Applaud">Applaud</option>
+            <option value="Notes">Notes</option>
+            <option value="like50">like50</option>
+            <option value="like400">like400</option>
+            <option value="like2000">like2000</option>
+            <option value="like5000">like5000</option>
+            <option value="like10000">like10000</option>
+            <option value="TipJar200">TipJar200</option>
+            <option value="TipJar500">TipJar500</option>
+            <option value="TipJar1000">TipJar1000</option>
+            <option value="TipJar5000">TipJar5000</option>
+            <option value="TipJar10000">TipJar10000</option>
+            <option value="TipJar15000">TipJar15000</option>
+            <option value="TipJar25000">TipJar25000</option>
+            <option value="TipJar30000">TipJar30000</option>
+            <option value="TipJar100000">TipJar100000</option>
+        </select>
+        <button class="test" onclick="TestSticker();">Test Gifts!</button>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "obssticker",
+  "version": "1.0.0",
+  "description": "A program to animate Stickers, Gifts and Emojis on the streaming platform Younow",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luca Lazzeri",
+  "license": "ISC",
+  "devDependencies": {
+    "@unicode/unicode-13.0.0": "^1.0.2"
+  },
+  "dependencies": {
+    "emoji-regex": "^9.2.0"
+  }
+}
