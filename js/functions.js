@@ -283,7 +283,12 @@ function FetchEvent()
                     case(851):
                         Animation("Beer",false,0);
                         break;
-
+                    case(875):
+                        Animation("Speaker",false,0);
+                        break;
+                    case(866):
+                        Animation("OMG",false,0);
+                        break;
                     //Gift Cases
                     case(384):
                         loopGifts (notesGift, 384, true, 0, userId);
@@ -435,6 +440,16 @@ async function Animation(StickerName, isGift, tipJarValue)
                 Picture.style.height = 100  + "px";
                 Picture.style.width = 100 + "px";
                 Picture.style.backgroundImage = "url('Stickers/beer.png')";
+                break;
+            case "Speaker":
+                Picture.style.height = 100  + "px";
+                Picture.style.width = 100 + "px";
+                Picture.style.backgroundImage = "url('Stickers/speaker.png')";
+                break;
+            case "OMG":
+                Picture.style.height = 100  + "px";
+                Picture.style.width = 100 + "px";
+                Picture.style.backgroundImage = "url('Stickers/omg.png')";
                 break;
             case "Likes":
                 Picture.style.backgroundImage = "url('Stickers/10.png')";
