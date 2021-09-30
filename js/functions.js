@@ -1,6 +1,6 @@
 ﻿//THESE ARE THE 5 THINGS YOU HAVE TO SET YOURSELF:
 // PLEASE BE CAREFUL - ONLY MODIFY THE NUMBERS AND THE USER NAME
-var userName = "FelipeBrutal";
+let userName = "FunnyBunnyFauxShow";
 
 //For the maximum amount of emojis per text
 let maxEmojiCount = 30;
@@ -8,7 +8,7 @@ let maxEmojiCount = 30;
 // 0 Means no profile pics, 1 Means Low, 2 Means Medium, 3 Means High
 let profilePictureAmountLevel = 2;
 
-//Sticker Amount for each Gift, to turn of set to 0.
+//EmojiSticker Amount for each Gift, to turn of set to 0.
 let heartGift = 5;
 
 let applaudGift = 12;
@@ -20,14 +20,13 @@ let likeGift5000 = 15;
 let likeGift10000 = 20;
 
 
-//Sticker Passen
+//EmojiSticker Passen
 let tipJar200 = 15;
 let tipJar500 = 25;
 let tipJar1000 = 30;
 let tipJar2500 = 40;
 let tipJar10000 = 50;
 let tipJar15000 = 60;
-let tipJar25000 = 70;
 let tipJar30000 = 80;
 let tipJar100000 = 100;
 
@@ -42,14 +41,14 @@ let width = 1200;
 let height = 500;
 let down = 150;
 let toTheRight = 100;
-var broadcastId;
+let broadcastId;
 
 let notes = ['Note0', 'Note1', 'Note2', 'Note3', 'Note4', 'Note5'];
 let tipJars = ['LightBlue', 'Blue', 'Green', 'LightGreen', 'Pink', 'Purple', 'Silver', 'Red', 'Yellow', 'Gold'];
 
-var userId;
-var error = false;
-var eventsToTrigger = [];
+let userId;
+let error = false;
+let eventsToTrigger = [];
 let minX = toTheRight;
 let maxX = toTheRight + width;
 let minY = down;
@@ -68,7 +67,7 @@ async function DownloadGifts()
 {
     console.log ("Fetching Gifts...");
     targetUrl = 'https://ynassets.younow.com/giftsData/live/de/data.json';
-    var json = fetch (targetUrl)
+    let json = fetch (targetUrl)
         .then (blob => blob.json ())
         .then (data =>
         {
@@ -81,11 +80,10 @@ async function CastEvents()
 {
     while (true)
     {
-        if (eventsToTrigger.length != 0)
+        if (eventsToTrigger.length !== 0)
         {
-            var totrigger = eventsToTrigger.shift ();
-            console.log (totrigger);
-            Animation (totrigger, false, 0);
+            let totrigger = eventsToTrigger.shift ();
+            Animation (totrigger, false, 0, null);
         }
         await sleep (200);
     }
@@ -102,14 +100,14 @@ async function Retry()
 async function FetchBroadcastId()
 {
     console.log ("Fetching Broadcast....");
-    var proxyUrl = 'https://younow-cors-header.herokuapp.com/?q=',
+    let proxyUrl = 'https://younow-cors-header.herokuapp.com/?q=',
         targetUrl = 'https://api.younow.com/php/api/broadcast/info/curId=0/user=' + userName;
-    var json = fetch (proxyUrl + targetUrl)
+    let json = fetch (proxyUrl + targetUrl)
         .then (blob => blob.json ())
         .then (data =>
         {
             json = JSON.stringify (data, null, 2);
-            var done = JSON.parse (json);
+            let done = JSON.parse (json);
             if (json.length < 1)
             {
                 console.log ("No Data Found");
@@ -142,26 +140,29 @@ function FetchEvent()
 {
     //First Startup Connection:
     console.log ("Succesfully Connected to WebSocket");
-    var pusher = new Pusher ('d5b7447226fc2cd78dbb', {
+    let pusher = new Pusher ('d5b7447226fc2cd78dbb', {
         cluster: "younow"
     });
-    var channel = pusher.subscribe ("public-channel_" + userId);
+    let channel = pusher.subscribe ("public-channel_" + userId);
 
-    //Get Stickers
-    channel.bind ('onPartnerSticker', function (data)
+    channel.bind ('onSticker', function (data)
     {
-        if (data.message !== "undefined")
+        for (let i = 0; i < data.message.stickers.length; i++)
         {
-            for (let i = 0; i < data.message.stageGifts.length; i++)
+            let obj = data.message.stickers[i];
+
+            if (obj.assetSku.includes ('STICKER_TIER'))
             {
-                Animation (data.message.stageGifts[i].target, false, 0);
+                Animation (obj.stickerUserId, false, 0, obj.assetSku)
+            } else
+            {
+                Animation (obj.assetSku, false, 0, null)
             }
         }
     });
 
     channel.bind ('onChat', function (data)
     {
-
         if (data.message !== "undefined")
         {
             for (let i = 0; i < data.message.comments.length; i++)
@@ -169,7 +170,6 @@ function FetchEvent()
                 let input = data.message.comments[i].comment;
                 castEmoji (input);
             }
-
         }
     });
 
@@ -184,111 +184,6 @@ function FetchEvent()
                 console.log (data.message.stageGifts[i].giftId);
                 switch (data.message.stageGifts[i].giftId)
                 {
-                    case(5):
-                        Animation ("Likes", false, 0);
-                        break;
-                    case(187):
-                        Animation ("Avocado", false, 0);
-                        break;
-                    case(472):
-                        Animation ("Bo", false, 0);
-                        break;
-                    case(136):
-                        Animation ("Burger", false, 0);
-                        break;
-                    case(201):
-                        Animation ("Cactus", false, 0);
-                        break;
-                    case(191):
-                        Animation ("Cone", false, 0);
-                        break;
-                    case(189):
-                        Animation ("Cupcake", false, 0);
-                        break;
-                    case(192):
-                        Animation ("Dancer", false, 0);
-                        break;
-                    case(204):
-                        Animation ("Donut", false, 0);
-                        break;
-                    case(195):
-                        Animation ("Flame", false, 0);
-                        break;
-                    case(198):
-                        Animation ("Guitar", false, 0);
-                        break;
-                    case(854):
-                        Animation ("Heart", false, 0);
-                        break;
-                    case(206):
-                        Animation ("Lips", false, 0);
-                        break;
-                    case(197):
-                        Animation ("Microphone", false, 0);
-                        break;
-                    case(194):
-                        Animation ("Peacesign", false, 0);
-                        break;
-                    case(202):
-                        Animation ("Pizza", false, 0);
-                        break;
-                    case(306):
-                        Animation ("Props1", false, 0);
-                        break;
-                    case(305):
-                        Animation ("Props2", false, 0);
-                        break;
-                    case(196):
-                        Animation ("Puppy", false, 0);
-                        break;
-                    case(205):
-                        Animation ("Ring", false, 0);
-                        break;
-                    case(207):
-                        Animation ("Rose", false, 0);
-                        break;
-                    case(193):
-                        Animation ("Unicorn", false, 0);
-                        break;
-                    case(200):
-                        Animation ("Dino", false, 0);
-                        break;
-                    case(858):
-                        Animation("Pray",false,0);
-                        break;
-                    case(860):
-                        Animation("Scream",false,0);
-                        break;
-                    case(857):
-                        Animation("Love",false,0);
-                        break;
-                    case(861):
-                        Animation("Smile",false,0);
-                        break;
-                    case(856):
-                        Animation("Cry",false,0);
-                        break;
-                    case(859):
-                        Animation("Sad",false,0);
-                        break;
-                    case(855):
-                        Animation("Hi",false,0);
-                        break;
-                    case(853):
-                        Animation("DragMe",false,0);
-                        break;
-                    case(852):
-                        Animation("Coktail",false,0);
-                        break;
-                    case(851):
-                        Animation("Beer",false,0);
-                        break;
-                    case(875):
-                        Animation("Speaker",false,0);
-                        break;
-                    case(866):
-                        Animation("OMG",false,0);
-                        break;
                     //Gift Cases
                     case(384):
                         loopGifts (notesGift, 384, true, 0, userId);
@@ -353,268 +248,133 @@ function FetchEvent()
     });
 }
 
-async function Animation(StickerName, isGift, tipJarValue)
+function getStickerStyleAndChords(StickerName, isGift, tipJarValue, subStickerTier, Picture)
 {
-    var WholeThing = document.createElement ("div");
+    console.log(subStickerTier,StickerName);
+    let randomChords;
+    Picture.style.height = 100 + "px";
+    Picture.style.width = 100 + "px";
+    //SubStickers, Stickers, Gifts
+    if (subStickerTier)
+    {
+        randomChords = RandomCords (200);
+        Picture.classList.add ("BigSticker");
+    } else
+    {
+        randomChords = RandomCords (150);
+        Picture.classList.add ("SmallSticker");
+    }
+
+    //Random position:
+    Picture.style.top = randomChords.y + "px";
+    Picture.style.left = randomChords.x + "px";
+}
+
+function setBackgroundPicture(StickerName, isGift, tipJarValue, subStickerTier, Picture)
+{
+    if (subStickerTier)
+    {
+        console.log("url(' https://ynassets.younow.com/subscriptionsTiers/usersAssets/live/"+ StickerName +"/"+ subStickerTier+"/web_"+ subStickerTier+".png)");
+        Picture.style.background = "url(https://ynassets.younow.com/subscriptionsTiers/usersAssets/live/"+ StickerName +"/"+ subStickerTier+"/web_"+ subStickerTier+".png)";
+    } else if (!isGift)
+    {
+        Picture.style.backgroundImage = "url('https://ynassets.younow.com/subscriptionsTiers/usersAssets/live/1/" + StickerName + "/web_" + StickerName +".png";
+    } else if (tipJarValue !== 0)
+    {
+        let item;
+        switch (tipJarValue)
+        {
+            case(200):
+                item = tipJars[Math.floor (randomNumber (0, 3))];
+                break;
+            case(500):
+                item = tipJars[Math.floor (randomNumber (2, 5))];
+                break;
+            case(1000):
+                item = tipJars[Math.floor (randomNumber (3, 6))];
+                break;
+            case(2500):
+                item = tipJars[Math.floor (randomNumber (4, 7))];
+                break;
+            case(10000):
+                item = tipJars[Math.floor (randomNumber (5, 8))];
+                break;
+            case(15000):
+                item = tipJars[Math.floor (randomNumber (5, 8))];
+                break;
+            case(25000):
+                item = tipJars[Math.floor (randomNumber (6, 9))];
+                break;
+            case(30000):
+                item = tipJars[Math.floor (randomNumber (7, 10))];
+                break;
+            case(100000):
+                item = tipJars[Math.floor (randomNumber (7, 10))];
+                break;
+        }
+        Picture.style.backgroundImage = "url('TipJars/TipJar" + item + ".png')";
+    } else
+    {
+        switch (StickerName)
+        {
+            //IF we wanna add other unique gifts
+            case(384):
+                //NOTES
+                let item = notes[Math.floor (Math.random () * notes.length)];
+                Picture.style.backgroundImage = "url('MiscGifts/" + item + ".png')";
+                break;
+            default:
+                Picture.style.backgroundImage = "url('MiscGifts/" + StickerName + ".png')";
+        }
+    }
+}
+
+async function Animation(StickerName, isGift, tipJarValue, subStickerTier)
+{
+    let WholeThing = document.createElement ("div");
     WholeThing.id = "WholeThing";
 
     //Create Picture PASS
-    var Picture = document.createElement ("div");
+    let Picture = document.createElement ("div");
     Picture.id = "CustomPicture";
     Picture.style.position = "absolute";
-    let randos;
-    //SET HEIGHT
-    if (isGift)
-    {
-        randos = RandomCords (200);
-        Picture.classList.add ("BigSticker");
-        Picture.style.height = 100 + "px";
-        Picture.style.width = 100 + "px";
-    } else if (Number.isInteger (StickerName) || StickerName.localeCompare ("Likes") === 0)
-    {
-        randos = RandomCords (200);
-        Picture.classList.add ("BigSticker");
-        Picture.style.height = 300 + "px";
-        Picture.style.width = 300 + "px";
-    } else
-    {
-        randos = RandomCords (150);
-        Picture.classList.add ("SmallSticker");
-        Picture.style.height = 156 + "px";
-        Picture.style.width = 156 + "px";
-    }
 
+    getStickerStyleAndChords (StickerName, isGift, tipJarValue, subStickerTier, Picture);
 
+    setBackgroundPicture (StickerName, isGift, tipJarValue, subStickerTier, Picture);
 
-    if (!isGift)
-    {
-        //Set picture size
-        switch (StickerName)
-        {
-            case "Pray":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/pray.png')";
-                break;
-            case "Scream":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/scream.png')";
-                break;
-            case "Love":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/love.png')";
-                break;
-            case "Smile":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/smile.png')";
-                break;
-            case "Cry":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/cry.png')";
-                break;
-            case "Sad":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/sad.png')";
-                break;
-            case "Hi":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/hi.png')";
-                break;
-            case "DragMe":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/dragme.png')";
-                break;
-            case "Coktail":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/coktail.png')";
-                break;
-            case "Beer":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/beer.png')";
-                break;
-            case "Speaker":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/speaker.png')";
-                break;
-            case "OMG":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/omg.png')";
-                break;
-            case "Likes":
-                Picture.style.backgroundImage = "url('Stickers/10.png')";
-                break;
-            case "Avocado":
-                Picture.style.backgroundImage = "url('Stickers/avocado.png')";
-                break;
-            case "Bo":
-                Picture.style.backgroundImage = "url('Stickers/bo.png')";
-                break;
-            case "Burger":
-                Picture.style.backgroundImage = "url('Stickers/burger.png')";
-                break;
-            case "Cactus":
-                Picture.style.backgroundImage = "url('Stickers/cactus.png')";
-                break;
-            case "Cone":
-                Picture.style.backgroundImage = "url('Stickers/cone.png')";
-                break;
-            case "Cupcake":
-                Picture.style.backgroundImage = "url('Stickers/cupcake.png')";
-                break;
-            case "Dancer":
-                Picture.style.backgroundImage = "url('Stickers/dance.png')";
-                break;
-            case "Donut":
-                Picture.style.backgroundImage = "url('Stickers/donut.png')";
-                break;
-            case "Flame":
-                Picture.style.backgroundImage = "url('Stickers/flame.png')";
-                break;
-            case "Guitar":
-                Picture.style.backgroundImage = "url('Stickers/guitar.png')";
-                break;
-            case "Heart":
-                Picture.style.height = 100  + "px";
-                Picture.style.width = 100 + "px";
-                Picture.style.backgroundImage = "url('Stickers/heart.png')";
-                break;
-            case "Lips":
-                Picture.style.backgroundImage = "url('Stickers/lips.png')";
-                break;
-            case "Microphone":
-                Picture.style.backgroundImage = "url('Stickers/microphone.png')";
-                break;
-            case "Peacesign":
-                Picture.style.backgroundImage = "url('Stickers/peacesign.png')";
-                break;
-            case "Pizza":
-                Picture.style.backgroundImage = "url('Stickers/pizza.png')";
-                break;
-            case "Props1":
-                Picture.style.backgroundImage = "url('Stickers/props1.png')";
-                break;
-            case "Props2":
-                Picture.style.backgroundImage = "url('Stickers/props2.png')";
-                break;
-            case "Puppy":
-                Picture.style.backgroundImage = "url('Stickers/puppy.png')";
-                break;
-            case "Ring":
-                Picture.style.backgroundImage = "url('Stickers/ring.png')";
-                break;
-            case "Rose":
-                Picture.style.backgroundImage = "url('Stickers/rose.png')";
-                break;
-            case "Unicorn":
-                Picture.style.backgroundImage = "url('Stickers/unicorn.png')";
-                break;
-            case "Dino":
-                Picture.style.backgroundImage = "url('Stickers/dino.png')";
-                break;
-            default:
-                Picture.style.backgroundImage = "url('https://ynassets.younow.com/gifts/live/PARTNER_STICKER/" + StickerName + "/ios_icon_gift_PARTNER_STICKER_bar@3x.png')";
-        }
-    } else
-    {
-        if (tipJarValue !== 0)
-        {
-            let item;
-            console.log (tipJarValue);
-            switch (tipJarValue)
-            {
-                case(200):
-                    item = tipJars[Math.floor (randomNumber (0, 3))];
-                    break;
-                case(500):
-                    item = tipJars[Math.floor (randomNumber (2, 5))];
-                    break;
-                case(1000):
-                    item = tipJars[Math.floor (randomNumber (3, 6))];
-                    break;
-                case(2500):
-                    item = tipJars[Math.floor (randomNumber (4, 7))];
-                    break;
-                case(10000):
-                    item = tipJars[Math.floor (randomNumber (5, 8))];
-                    break;
-                case(15000):
-                    item = tipJars[Math.floor (randomNumber (5, 8))];
-                    break;
-                case(25000):
-                    item = tipJars[Math.floor (randomNumber (6, 9))];
-                    break;
-                case(30000):
-                    item = tipJars[Math.floor (randomNumber (7, 10))];
-                    break;
-                case(100000):
-                    item = tipJars[Math.floor (randomNumber (7, 10))];
-                    break;
-            }
-            Picture.style.backgroundImage = "url('TipJars/TipJar" + item + ".png')";
-
-        } else
-        {
-            switch (StickerName)
-            {
-                //IF we wanna add other unique gifts
-                case(384):
-                    //NOTES
-                    let item = notes[Math.floor (Math.random () * notes.length)];
-                    Picture.style.backgroundImage = "url('MiscGifts/" + item + ".png')";
-                    break;
-                default:
-                    Picture.style.backgroundImage = "url('MiscGifts/" + StickerName + ".png')";
-            }
-        }
-    }
-
-//Random position:
-    Picture.style.top = randos.y + "px";
-    Picture.style.left = randos.x + "px";
-
+    console.log (Picture);
 //Appending Picture PASS
     WholeThing.appendChild (Picture);
     document.getElementById ("Container").appendChild (WholeThing);
-    console.log (Picture.style.transform);
 
 //Wait and Remove PASS
     await sleep (2000);
-    var all = document.getElementById ("WholeThing");
-    all.parentNode.removeChild (all);
+    let all = document.getElementById ("WholeThing");
+   all.parentNode.removeChild (all);
 }
 
 async function AddProfilePic(times, profileId)
 {
-    for (i = 0; i < times; i++)
+    for (let i = 0; i < times; i++)
     {
         await sleep (randomNumber (0, 300));
-        var WholeThing = document.createElement ("div");
+        let WholeThing = document.createElement ("div");
         WholeThing.id = "WholeThing";
         //Create Picture PASS
-        var Picture = document.createElement ("div");
+        let Picture = document.createElement ("div");
         Picture.id = "CustomPicture";
         Picture.style.position = "absolute";
-        let randos;
+        let randomChords;
         //SET HEIGHT
-        randos = RandomCords (200);
+        randomChords = RandomCords (200);
         Picture.classList.add ("ProfilePics");
         Picture.style.height = 100 + "px";
         Picture.style.width = 100 + "px";
         Picture.style.backgroundImage = "url(' https://ynassets.younow.com/user/live/" + profileId + "/" + profileId + ".jpg')";
         //Random position:
-        Picture.style.top = randos.y + "px";
-        Picture.style.left = randos.x + "px";
+        Picture.style.top = randomChords.y + "px";
+        Picture.style.left = randomChords.x + "px";
 
         //Appending Picture PASS
         WholeThing.appendChild (Picture);
@@ -623,20 +383,19 @@ async function AddProfilePic(times, profileId)
 
         //Wait and Remove PASS
         await sleep (2000);
-        var all = document.getElementById ("WholeThing");
+        let all = document.getElementById ("WholeThing");
         all.parentNode.removeChild (all);
     }
 
 }
 
-async function Sticker(stickerText)
+async function EmojiSticker(stickerText)
 {
     await sleep (randomNumber (0, 600));
     let WholeThing = document.createElement ("div");
     WholeThing.id = "WholeThing";
 
-    let randos = RandomCords (200);
-    console.log (randos);
+    let randomChords = RandomCords (200);
     let emoji = document.createElement ("div");
     emoji.classList.add ("Emoji");
     emoji.innerText = stickerText;
@@ -645,8 +404,8 @@ async function Sticker(stickerText)
     emoji.style.height = "50px";
     emoji.style.transform = "scale(2)";
     //Random position:
-    emoji.style.top = randos.y + "px";
-    emoji.style.left = randos.x + "px";
+    emoji.style.top = randomChords.y + "px";
+    emoji.style.left = randomChords.x + "px";
 
     //Appending Picture PASS
     WholeThing.appendChild (emoji);
@@ -666,7 +425,6 @@ async function loopGifts(iterations, name, isGift, tipJarValue, profileId)
 {
     for (let i = 0; i < iterations; i++)
     {
-        console.log ("Iteration nr: " + i);
         let randNum = randomNumber (0, 100);
         switch (profilePictureAmountLevel)
         {
@@ -687,7 +445,7 @@ async function loopGifts(iterations, name, isGift, tipJarValue, profileId)
             default:
                 break;
         }
-        Animation (name, isGift, tipJarValue);
+        Animation (name, isGift, tipJarValue, null);
         await sleep (randomNumber (200, 450));
     }
 }
@@ -703,7 +461,7 @@ function TestEmojis()
 {
     let arr = ["Likes", "Avocado", "Bo", "Burger", "Cactus", "Cone", "Cupcake", "Dancer", "Donut", "Flame", "Guitar", "Heart", "Lips", "Microphone", "Peacesign", "Pizza", "Props1", "Props2", "Puppy", "Ring", "Rose", "Unicorn"];
     let item = arr[Math.floor (Math.random () * arr.length)];
-    Sticker ("😊");
+    EmojiSticker ("😊");
 }
 
 function TestProfilePics()
@@ -807,11 +565,12 @@ function castEmoji(input)
     if (regex.test (input))
     {
         const emojis = input.match (regex);
-        for (i = 0; i < emojis.length; i++)
+        for (let i = 0; i < emojis.length; i++)
         {
             if (i > maxEmojiCount)
                 return;
-            Sticker (emojis[i]);
+
+            EmojiSticker (emojis[i]);
         }
     }
 }
